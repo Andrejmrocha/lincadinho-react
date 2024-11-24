@@ -25,7 +25,6 @@ export const fetchUsers = createAsyncThunk(
     const data = await userService.getUsers(searchTerm);
     if (data.error) return thunkAPI.rejectWithValue(data.error);
     const filteredData = data.content.filter((user) => user.id !== userId);
-    console.log("users: ", filteredData);
     return filteredData;
   }
 );

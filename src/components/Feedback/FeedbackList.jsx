@@ -43,15 +43,24 @@ const FeedbackList = () => {
           <Typography variant="h6">Bem-vindo ao seu feed!</Typography>
         </Toolbar>
       </AppBar>
-      {feedbackList.map((feedback, index) => (
-        <FeedbackCard
-          key={index}
-          remetente={feedback.remetente}
-          destinatario={feedback.destinatario}
-          comentario={feedback.comentario}
-          data={feedback.data}
-        />
-      ))}
+
+      {/* Condicional para exibir mensagem caso não haja feedbacks */}
+      {feedbackList.length === 0 ? (
+        <Typography variant="h6" sx={{ textAlign: "center", marginTop: 2 }}>
+          Não há feedbacks para exibir. Comece a enviar feedbacks para seus
+          colegas!
+        </Typography>
+      ) : (
+        feedbackList.map((feedback, index) => (
+          <FeedbackCard
+            key={index}
+            remetente={feedback.remetente}
+            destinatario={feedback.destinatario}
+            comentario={feedback.comentario}
+            data={feedback.data}
+          />
+        ))
+      )}
     </Box>
   );
 };

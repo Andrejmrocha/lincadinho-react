@@ -12,7 +12,7 @@ const FriendRequest = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
   const { requests, error, loading } = useSelector((state) => state.friendship);
-
+  console.log("requests: ", requests);
   useEffect(() => {
     if (user?.id) {
       dispatch(fetchFriendshipRequests(user.id));

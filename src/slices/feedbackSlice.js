@@ -15,6 +15,9 @@ export const feedbackSlice = createSlice({
   name: "feedback",
   initialState,
   reducers: {
+    resetFeedbackState(state) {
+      return initialState; // Reseta todo o estado
+    },
     resetMessage: (state) => {
       state.message = null;
     },
@@ -26,9 +29,7 @@ export const feedbackSlice = createSlice({
         state.error = null;
       })
       .addCase(reviewText.fulfilled, (state, action) => {
-        state.success = true;
         state.reviewLoading = false;
-        state.error = null;
         state.suggestedText = action.payload;
       })
       .addCase(reviewText.rejected, (state, action) => {
@@ -44,11 +45,13 @@ export const feedbackSlice = createSlice({
         state.submitLoading = false;
         state.error = null;
         state.feedback = action.payload;
+        state.message = "Feedback enviado com sucesso";
       })
       .addCase(submitFeedback.rejected, (state, action) => {
         state.submitLoading = false;
         state.error = action.payload;
         state.feedback = null;
+        state.message = "Erro ao enviar feedback";
       });
   },
 });
@@ -73,9 +76,9 @@ export const reviewText = createAsyncThunk(
     if (response.error) {
       return thunkAPI.rejectWithValue(response.error);
     }
-    return response.suggestedText;
+    return response;
   }
 );
 
-export const { resetMessage } = feedbackSlice.actions;
+export const { resetMessage, resetFeedbackState } = feedbackSlice.actions;
 export default feedbackSlice.reducer;

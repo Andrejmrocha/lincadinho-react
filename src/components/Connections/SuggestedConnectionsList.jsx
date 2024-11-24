@@ -29,7 +29,6 @@ const SuggestedConnectionsList = () => {
   const [sendingRequest, setSendingRequest] = useState(false);
 
   useEffect(() => {
-    console.log("start");
     dispatch(fetchSuggestedFriendship());
   }, [dispatch]);
 
@@ -69,15 +68,29 @@ const SuggestedConnectionsList = () => {
           <Typography variant="h6">Sugestões de amizade</Typography>
         </Toolbar>
       </AppBar>
-      {friendships.map((usuario, index) => (
-        <SuggestedConnectionsCard
-          name={usuario.nome}
-          key={usuario.id}
-          foto_url={usuario.foto_url}
-          onSendRequest={() => handleSendRequest(usuario.id)}
-          disabled={sendingRequest}
-        />
-      ))}
+
+      {/* Verifica se não há sugestões */}
+      {friendships.length === 0 ? (
+        <Typography
+          variant="body1"
+          color="textSecondary"
+          align="center"
+          sx={{ marginTop: 3 }}
+        >
+          Não há sugestões de amizade no momento.
+        </Typography>
+      ) : (
+        friendships.map((usuario) => (
+          <SuggestedConnectionsCard
+            name={usuario.nome}
+            key={usuario.id}
+            foto_url={usuario.foto_url}
+            onSendRequest={() => handleSendRequest(usuario.id)}
+            disabled={sendingRequest}
+          />
+        ))
+      )}
+
       <Snackbar
         open={notification.open}
         autoHideDuration={3000}

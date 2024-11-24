@@ -1,6 +1,7 @@
 import React from "react";
 import FriendRequest from "../components/Friendship/FriendRequest";
 import { AppBar, Box, Toolbar, Typography } from "@mui/material";
+import FriendsList from "../components/Friendship/FriendList";
 
 const Friendship = () => {
   return (
@@ -13,7 +14,7 @@ const Friendship = () => {
     >
       <Box
         sx={{
-          width: "30%",
+          width: "40%",
           overflowY: "auto",
           padding: 2,
 
@@ -34,14 +35,7 @@ const Friendship = () => {
       </Box>
 
       {/* Área principal */}
-      <Box
-        sx={{
-          flexGrow: 1,
-          padding: 2,
-        }}
-      >
-        <h1>Área principal</h1>
-      </Box>
+      <FriendsList />
     </Box>
   );
 };

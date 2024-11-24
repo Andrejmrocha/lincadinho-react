@@ -23,7 +23,11 @@ const pagesNotAuth = [
 const Navbar = () => {
   const { auth } = useAuth();
   const { user } = useSelector((state) => state.user);
-  const organization = user ? user.organization : "";
+  // const organization = user ? user.organization : "";
+  const { organization } = useSelector((state) => state.organization);
+  if (organization) {
+    console.log(organization);
+  }
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -86,18 +90,20 @@ const Navbar = () => {
             LOGO
           </Typography>
         </Box>
-        <Box
-          sx={{
-            flexGrow: 1,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          {/* <Typography variant="h6" sx={{ color: "white" }}>
-              Texto Centralizado
-            </Typography> */}
-        </Box>
+        {auth && (
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Typography variant="h6" sx={{ color: "white" }}>
+              {organization}
+            </Typography>
+          </Box>
+        )}
         <Box sx={{ display: "flex", alignItems: "center" }}>
           {auth ? (
             <>

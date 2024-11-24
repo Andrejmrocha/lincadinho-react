@@ -22,8 +22,6 @@ export const fetchFriendshipRequests = createAsyncThunk(
 export const sendFriendshipRequest = createAsyncThunk(
   "friendship/sendFriendshipRequest",
   async ({ userId, friendId }, thunkAPI) => {
-    console.log("user id: ", userId);
-    console.log("friend id: ", friendId);
     const response = await friendshipService.sendFriendshipRequest(
       userId,
       friendId
@@ -31,7 +29,7 @@ export const sendFriendshipRequest = createAsyncThunk(
     if (response.error) {
       return thunkAPI.rejectWithValue(response.error);
     }
-
+    console.log("enviando: ", response.data.destinatario.id);
     return response.data;
   }
 );
@@ -68,7 +66,6 @@ export const fetchSuggestedFriendship = createAsyncThunk(
   "friendship/fetchSuggestedFriendship",
   async (_, thunkAPI) => {
     const response = await friendshipService.suggestedFriendship();
-    console.log("slice", response);
     if (response.error) {
       return thunkAPI.rejectWithValue(response.error);
     }
@@ -102,7 +99,6 @@ export const friendshipSlice = createSlice({
       .addCase(fetchSuggestedFriendship.fulfilled, (state, action) => {
         state.loading = false;
         state.friendships = action.payload.content;
-        console.log("fulfiled: ", action.payload.content);
       })
       .addCase(fetchSuggestedFriendship.rejected, (state, action) => {
         state.loading = false;
@@ -114,6 +110,9 @@ export const friendshipSlice = createSlice({
       .addCase(sendFriendshipRequest.fulfilled, (state, action) => {
         state.loading = false;
         state.requests.push(action.payload);
+        state.friendships = state.friendships.filter(
+          (friend) => friend.id !== action.payload.destinatario.id
+        );
       })
       .addCase(sendFriendshipRequest.rejected, (state, action) => {
         state.loading = false;
