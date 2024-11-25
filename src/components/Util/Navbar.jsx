@@ -10,10 +10,25 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { NavLink, useNavigate } from "react-router-dom";
+import styled from "styled-components";
 
 import { useAuth } from "../../hooks/useAuth";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../slices/authSlice";
+
+const StyledNavLinkOrg = styled(NavLink)({
+  textDecoration: "none",
+  color: "white",
+  fontFamily: "Roboto",
+  fontSize: "1.5rem",
+});
+
+const StyledNavLink = styled(NavLink)({
+  textDecoration: "none",
+  color: "white",
+  fontFamily: "Roboto",
+  fontSize: "1rem",
+});
 
 const pagesNotAuth = [
   { description: "Login", link: "/login" },
@@ -23,16 +38,14 @@ const pagesNotAuth = [
 const Navbar = () => {
   const { auth } = useAuth();
   const { user } = useSelector((state) => state.user);
-  // const organization = user ? user.organization : "";
-  const { organization } = useSelector((state) => state.organization);
-  if (organization) {
-    console.log(organization);
-  }
+  const organization = user ? user.empresa : "";
+  // const { organization } = useSelector((state) => state.organization);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const linkDetails =
-    organization === ""
+    organization === null
       ? { description: "Cadastrar organização", link: "/cadastro/organizacao" }
       : { description: "Enviar Feedback", link: "/enviar-feedback" };
 
@@ -73,22 +86,6 @@ const Navbar = () => {
           >
             Lincadinho
           </Typography>
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            sx={{
-              display: { xs: "flex", md: "none" },
-              flexGrow: 1,
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            LOGO
-          </Typography>
         </Box>
         {auth && (
           <Box
@@ -99,9 +96,9 @@ const Navbar = () => {
               alignItems: "center",
             }}
           >
-            <Typography variant="h6" sx={{ color: "white" }}>
-              {organization}
-            </Typography>
+            <StyledNavLinkOrg to={"/organizacao"}>
+              {organization && organization.nome}
+            </StyledNavLinkOrg>
           </Box>
         )}
         <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -116,7 +113,7 @@ const Navbar = () => {
                 key={0}
               >
                 {pagesAuth.map((page, index) => (
-                  <NavLink to={page.link} key={index}>
+                  <StyledNavLink to={page.link} key={index}>
                     <Button
                       sx={{
                         my: 2,
@@ -127,11 +124,11 @@ const Navbar = () => {
                     >
                       {page.description}
                     </Button>
-                  </NavLink>
+                  </StyledNavLink>
                 ))}
               </Box>
               <Box sx={{ display: "flex", alignItems: "center" }}>
-                <NavLink to={"/meu-perfil"}>
+                <StyledNavLink to={"/meu-perfil"}>
                   <Tooltip title="Meu perfil">
                     <IconButton sx={{ p: 0 }}>
                       <Avatar
@@ -140,7 +137,7 @@ const Navbar = () => {
                       />
                     </IconButton>
                   </Tooltip>
-                </NavLink>
+                </StyledNavLink>
                 <Tooltip title="Logout">
                   <IconButton onClick={handleLogout} sx={{ p: 0, ml: 2 }}>
                     <LogoutIcon sx={{ color: "white" }} />
@@ -157,18 +154,19 @@ const Navbar = () => {
               }}
             >
               {pagesNotAuth.map((page, index) => (
-                <NavLink to={page.link} key={index}>
+                <StyledNavLink to={page.link} key={index}>
                   <Button
                     sx={{
                       my: 2,
                       color: "white",
                       display: "block",
                       fontSize: "12px",
+                      textDecoration: "none",
                     }}
                   >
                     {page.description}
                   </Button>
-                </NavLink>
+                </StyledNavLink>
               ))}
             </Box>
           )}

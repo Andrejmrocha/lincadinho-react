@@ -15,10 +15,12 @@ import UploadIcon from "@mui/icons-material/Upload";
 
 import { useSelector, useDispatch } from "react-redux";
 import { profile, resetMessage, updateUserProfile } from "../slices/userSlice";
+import { useNavigate } from "react-router-dom";
 import Message from "../components/Util/Message";
 
 const Profile = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { user, loading, error, success } = useSelector((state) => state.user);
 
   useEffect(() => {
@@ -42,15 +44,17 @@ const Profile = () => {
     sobrenome: "",
     organizacao: "",
     foto: "",
+    role: "",
   });
 
   useEffect(() => {
-    if (user) {
+    if (user.empresa) {
       setProfileData({
         nome: user.nome,
         sobrenome: user.sobrenome,
-        organizacao: user.nomeEmpresa,
+        organizacao: user.empresa.nome,
         foto: user.foto_url,
+        role: user.role,
       });
       setPreviewUrl(user.foto_url);
     }
@@ -192,6 +196,16 @@ const Profile = () => {
         >
           {isEditing ? "Salvar" : "Editar Perfil"}
         </Button>
+        {user.role === "ADMIN" && (
+          <Button
+            variant="outlined"
+            color="primary"
+            sx={{ mt: 2 }}
+            onClick={() => navigate("/organizacao")}
+          >
+            Gerenciar Organização
+          </Button>
+        )}
       </Box>
     </Container>
   );

@@ -23,6 +23,36 @@ export const createOrganization = createAsyncThunk(
   }
 );
 
+export const updateOrganization = createAsyncThunk(
+  "organization/updateOrganization",
+  async (organizationData, thunkAPI) => {
+    const response = await organizationService.updateOrganization(
+      organizationData
+    );
+
+    if (response.error) {
+      return thunkAPI.rejectWithValue(response.error);
+    }
+
+    return response;
+  }
+);
+
+export const fetchOrganizationDetails = createAsyncThunk(
+  "organization/fetchOrganization",
+  async (organizationId, thunkAPI) => {
+    const response = await organizationService.fetchOrganizationDetails(
+      organizationId
+    );
+
+    if (response.error) {
+      return thunkAPI.rejectWithValue(response.error);
+    }
+
+    return response;
+  }
+);
+
 export const organizationSlice = createSlice({
   name: "organization",
   initialState,
@@ -46,6 +76,37 @@ export const organizationSlice = createSlice({
         state.organization = action.payload;
       })
       .addCase(createOrganization.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        state.organization = null;
+      })
+      .addCase(updateOrganization.pending, (state) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(updateOrganization.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.error = null;
+        console.log("payload: ", action.payload);
+        state.organization = action.payload.data;
+      })
+      .addCase(updateOrganization.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        state.organization = null;
+      })
+      .addCase(fetchOrganizationDetails.pending, (state) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(fetchOrganizationDetails.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.error = null;
+        state.organization = action.payload.data;
+      })
+      .addCase(fetchOrganizationDetails.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
         state.organization = null;

@@ -34,7 +34,7 @@ const Home = () => {
     );
   }
 
-  if (user && !user.nomeEmpresa) {
+  if (user && !user.empresa?.nome) {
     return (
       <Box sx={{ width: "100%", height: "100%" }}>
         <Grid2

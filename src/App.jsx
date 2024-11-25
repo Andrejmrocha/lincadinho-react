@@ -13,7 +13,7 @@ import { useAuth } from "./hooks/useAuth";
 
 import Login from "./pages/login";
 import Home from "./pages/Home";
-import Organization from "./pages/Organization";
+import OrganizationRegister from "./pages/OrganizationRegister";
 
 import Message from "./components/Util/Message";
 
@@ -29,6 +29,8 @@ import authService from "./services/authService";
 import { login } from "./slices/authSlice";
 import Feedback from "./pages/Feedback";
 import Friendship from "./pages/Friendship";
+import Organization from "./pages/Organization";
+import OrganizationEdit from "./pages/OrganizationEdit";
 
 function App() {
   const { auth, loading, user, isChecking } = useAuth();
@@ -54,7 +56,7 @@ function App() {
   }, [dispatch, navigate, location.pathname]);
 
   const startTokenMonitor = () => {
-    const checkTokenInterval = 2 * 60 * 1000; // Intervalo de 4 minutos
+    const checkTokenInterval = 60 * 60 * 1000; // Intervalo de 4 minutos
 
     setInterval(async () => {
       const token = localStorage.getItem("token");
@@ -102,11 +104,13 @@ function App() {
             />
             <Route
               path="/cadastro/organizacao"
-              element={auth ? <Organization /> : <Navigate to="/" />}
+              element={auth ? <OrganizationRegister /> : <Navigate to="/" />}
             />
             <Route path="/meu-perfil" element={<Profile />} />
             <Route path="/enviar-feedback" element={<Feedback />} />
             <Route path="/minhas-conexoes" element={<Friendship />} />
+            <Route path="/organizacao" element={<Organization />} />
+            <Route path="/organizacao/editar" element={<OrganizationEdit />} />
           </Routes>
         </div>
       )}
